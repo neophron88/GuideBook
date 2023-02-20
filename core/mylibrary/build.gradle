@@ -1,0 +1,9 @@
+plugins {
+    id 'extended-android-library'
+}
+
+dependencies {
+    compileOnly libs.viewBinding
+    compileOnly libs.lifecycle.runtime
+    implementation libs.recyclerview
+}

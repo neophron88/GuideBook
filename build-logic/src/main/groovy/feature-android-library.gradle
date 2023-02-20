@@ -1,0 +1,30 @@
+plugins {
+    id 'extended-android-library'
+}
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(':core:theme')
+    implementation project(':core:mylibrary')
+    implementation project(':core:network')
+    implementation project(':core:database')
+
+    implementation libs.androidx.constraintlayout
+    implementation libs.recyclerview
+    implementation libs.fragment.ktx
+    implementation libs.paging.library
+    implementation libs.coroutines
+
+    implementation libs.glide
+    kapt libs.glide.compiler
+
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
+
+
+}

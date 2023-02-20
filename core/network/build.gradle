@@ -1,0 +1,10 @@
+plugins {
+    id 'extended-android-library'
+}
+
+dependencies {
+    implementation libs.okhttp
+    implementation libs.retrofit
+    implementation libs.moshi
+    implementation libs.okhttp.logging.interceptor
+}

@@ -31,9 +31,8 @@ class UpcomingPagingSource(
                     nextKey = if (upcomingList.size == params.loadSize) pageIndex + 1 else null
                 )
             }
-            is SingleResult.Error -> {
+            is SingleResult.Error ->
                 LoadResult.Error(throwable = TypeException(result.type))
-            }
         }
     }
 
@@ -44,28 +43,43 @@ class UpcomingPagingSource(
     }
 
     private suspend fun fetchUpcoming(loadSize: Int, offset: Int): SingleResult<List<Upcoming>> {
-        return if (offset == REFRESH) {
+        return if (offset == REFRESH)
+            fetchUpcomingAndTryToRevalidateDatabase(loadSize, offset)
+        else
+            fetchUpcomingAndTryToInsertToDatabase(loadSize, offset)
+
+    }
+
+    private suspend fun fetchUpcomingAndTryToRevalidateDatabase(
+        loadSize: Int, offset: Int
+    ): SingleResult<List<Upcoming>> {
+        val networkResult = wrapNetworkExceptions {
+            val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
+            localDataSource.insertAfterDeleteAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
+        }
+        return fetchUpcomingFromDatabaseAfterSyncWithNetwork(loadSize, offset, networkResult)
+    }
+
+    private suspend fun fetchUpcomingAndTryToInsertToDatabase(
+        loadSize: Int, offset: Int
+    ): SingleResult<List<Upcoming>> {
+        val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
+        return if (localUpcomingList.isEmpty()) {
             val networkResult = wrapNetworkExceptions {
                 val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
-                localDataSource.insertAfterDeleteAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
+                localDataSource.insertAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
             }
-            val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
-            if (localUpcomingList.isEmpty() && networkResult is SingleResult.Error) {
-                SingleResult.Error(networkResult.type)
-            } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
-        } else {
-            val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
-            if (localUpcomingList.isEmpty()) {
-                val networkResult = wrapNetworkExceptions {
-                    val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
-                    localDataSource.insertAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
-                }
-                val localUpcomingListAgain = localDataSource.fetchUpcomingList(loadSize, offset)
-                if (localUpcomingListAgain.isEmpty() && networkResult is SingleResult.Error) {
-                    SingleResult.Error(networkResult.type)
-                } else SingleResult.Success(localUpcomingListAgain.mapToUpcomingList())
-            } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
-        }
+            fetchUpcomingFromDatabaseAfterSyncWithNetwork(loadSize, offset, networkResult)
+        } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
+    }
+
+    private suspend fun fetchUpcomingFromDatabaseAfterSyncWithNetwork(
+        loadSize: Int, offset: Int, networkResult: SingleResult<Unit>
+    ): SingleResult<List<Upcoming>> {
+        val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
+        return if (localUpcomingList.isEmpty() && networkResult is SingleResult.Error) {
+            SingleResult.Error(networkResult.type)
+        } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
     }
 
     companion object {

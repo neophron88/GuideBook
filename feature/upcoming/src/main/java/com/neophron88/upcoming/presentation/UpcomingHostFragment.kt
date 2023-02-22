@@ -3,8 +3,8 @@ package com.neophron88.upcoming.presentation
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.neophron88.feature.contract.HasViewModelFactory
 import com.neophron88.feature.helper.extractDependency
 import com.neophron88.feature.viewModelFactory.ViewModelFactory
@@ -43,31 +43,41 @@ class UpcomingHostFragment :
         if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) return
 
         binding.apply {
-
-            toolbar.title = behavior.title
-
-            if (behavior.shouldApplyNavigateUp) {
-                toolbar.setNavigationOnClickListener { childNavController.popBackStack() }
-                toolbar.navigationIcon = ContextCompat.getDrawable(
-                    requireContext(),
-                    com.neophron88.theme.R.drawable.ic_back
-                )
-            }
-
-            behavior.applyMenu?.let {
-                toolbar.inflateMenu(it.menu)
-                toolbar.setOnMenuItemClickListener { menuItem -> it.onMenuItemClick(menuItem) }
-            }
-
-            lifecycleOwner.onStop {
-                toolbar.title = null
-                toolbar.menu.clear()
-                toolbar.setNavigationOnClickListener(null)
-                toolbar.navigationIcon = null
-                toolbar.setOnMenuItemClickListener(null)
-            }
+            updateToolbarTitle(behavior)
+            setNavigateUpBehavior(behavior)
+            setMenu(behavior)
+            setAutoClearToolbarRespectingLifeCycleOwner(lifecycleOwner)
         }
     }
 
+    private fun UpcomingHostBinding.updateToolbarTitle(behavior: ActionBarBehavior) {
+        toolbar.title = behavior.title
+    }
 
+    private fun UpcomingHostBinding.setNavigateUpBehavior(behavior: ActionBarBehavior) {
+        if (behavior.shouldApplyNavigateUp) {
+            toolbar.setNavigationOnClickListener { childNavController.popBackStack() }
+            toolbar.navigationIcon = ContextCompat.getDrawable(
+                requireContext(),
+                com.neophron88.theme.R.drawable.ic_back
+            )
+        }
+    }
+
+    private fun UpcomingHostBinding.setMenu(behavior: ActionBarBehavior) =
+        behavior.applyMenu?.let {
+            toolbar.inflateMenu(it.menu)
+            toolbar.setOnMenuItemClickListener { menuItem -> it.onMenuItemClick(menuItem) }
+        }
+
+
+    private fun UpcomingHostBinding.setAutoClearToolbarRespectingLifeCycleOwner(
+        lifecycleOwner: LifecycleOwner
+    ) = lifecycleOwner.onStop {
+        toolbar.title = null
+        toolbar.menu.clear()
+        toolbar.setNavigationOnClickListener(null)
+        toolbar.navigationIcon = null
+        toolbar.setOnMenuItemClickListener(null)
+    }
 }

@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface UpcomingService {
 
-    @GET("upcomingGuides")
+    @GET("service/v2/upcomingGuides/")
     suspend fun loadAllUpcoming(): UpcomingListResponse
 }

@@ -1,6 +1,6 @@
 package com.neophron88.feature.exceptions
 
-import com.neophron88.feature.result.NetworkErrorType
+import com.neophron88.feature.result.ErrorType
 import com.neophron88.feature.result.SingleResult
 import com.neophron88.network.base.BackendSideException
 import com.neophron88.network.base.ClientSideException
@@ -11,12 +11,12 @@ inline fun <T> wrapNetworkExceptions(run: () -> T): SingleResult<T> =
     try {
         SingleResult.Success(run())
     } catch (e: ConnectionException) {
-        SingleResult.Error(NetworkErrorType.NoConnection)
+        SingleResult.Error(ErrorType.NoConnection)
     } catch (e: BackendSideException) {
-        SingleResult.Error(NetworkErrorType.BackendFailed)
+        SingleResult.Error(ErrorType.BackendFailed)
     } catch (e: ClientSideException) {
-        SingleResult.Error(NetworkErrorType.Unknown)
+        SingleResult.Error(ErrorType.Unknown)
     } catch (e: UnknownNetworkException) {
-        SingleResult.Error(NetworkErrorType.Unknown)
+        SingleResult.Error(ErrorType.Unknown)
     }
 

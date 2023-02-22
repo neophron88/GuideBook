@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="application_logo">application_logo</string>
-    <string name="no_upcoming_guides">"No upcoming guides "</string>
+    <string name="no_upcoming_guides">No upcoming guides</string>
     <string name="image">image</string>
-    <string name="upcoming_guides">Upcomig guides</string>
+    <string name="upcoming_guides">Upcoming guides</string>
+    <string name="try_again">Try again</string>
+    <string name="empty_data">No data</string>
+    <string name="server_not_responding">Server not responding</string>
+    <string name="no_connection">No connection</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="end_date_format">End date: %1$s</string>
 </resources>

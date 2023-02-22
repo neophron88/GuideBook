@@ -11,11 +11,12 @@ class UpcomingRoomDataSource(
         upcomingDao.insertAll(upcomingList)
 
     override suspend fun insertAfterDeleteAll(upcomingList: List<UpcomingEntity>) {
-        TODO("Not yet implemented")
+        upcomingDao.insertAfterDeleteAll(upcomingList)
     }
 
-    override suspend fun fetchUpcomingList(loadSize: Int, offset: Int): List<UpcomingEntity> =
-        upcomingDao.fetchUpcomingList(loadSize, offset)
+    override suspend fun fetchUpcomingList(loadSize: Int, offset: Int): List<UpcomingEntity> {
+        return upcomingDao.fetchUpcomingList(loadSize, offset * loadSize)
+    }
 
     override suspend fun fetchUpcoming(upcomingId: Long): UpcomingEntity =
         upcomingDao.fetchUpcoming(upcomingId)

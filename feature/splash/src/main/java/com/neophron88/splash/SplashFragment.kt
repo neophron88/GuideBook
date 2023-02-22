@@ -16,13 +16,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun setupNavigation() = viewLifecycleOwner.postDelayed(1000) {
-        requireActivity().apply {
-            takeAs<AppRouter>().routeFromSplashToUpcoming()
-            window.setBackgroundDrawableResource(
-                com.neophron88.theme.R.drawable.bg_day_night
-            )
-        }
+        requireActivity().takeAs<AppRouter>().routeFromSplashToUpcoming()
     }
-
-
 }

@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.neophron88.database.upcoming.UpcomingLocalDataSource
 import com.neophron88.feature.exceptions.wrapNetworkExceptions
-import com.neophron88.feature.result.EmptyDataError
 import com.neophron88.feature.result.SingleResult
 import com.neophron88.feature.result.TypeException
 import com.neophron88.network.upcoming.UpcomingNetworkDataSource
@@ -20,7 +19,7 @@ class UpcomingPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Upcoming> {
         val pageIndex = params.key ?: 0
-        val result = fetchUpcoming(pageIndex, params.loadSize)
+        val result = fetchUpcoming(params.loadSize, pageIndex)
         return when (result) {
             is SingleResult.Success -> {
                 val upcomingList = result.value
@@ -30,8 +29,9 @@ class UpcomingPagingSource(
                     nextKey = if (upcomingList.size == params.loadSize) pageIndex + 1 else null
                 )
             }
-            is SingleResult.Error ->
+            is SingleResult.Error -> {
                 LoadResult.Error(throwable = TypeException(result.type))
+            }
         }
     }
 
@@ -48,22 +48,19 @@ class UpcomingPagingSource(
                 localDataSource.insertAfterDeleteAll(networkUpcomingList.mapToUpcomingEntityList())
             }
             val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
-            if (localUpcomingList.isEmpty()) {
-                if (networkResult is SingleResult.Error) SingleResult.Error(networkResult.type)
-                else SingleResult.Error(EmptyDataError)
+            if (localUpcomingList.isEmpty() && networkResult is SingleResult.Error) {
+                SingleResult.Error(networkResult.type)
             } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
         } else {
             val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
-
             if (localUpcomingList.isEmpty()) {
                 val networkResult = wrapNetworkExceptions {
                     val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
                     localDataSource.insertAll(networkUpcomingList.mapToUpcomingEntityList())
                 }
                 val localUpcomingListAgain = localDataSource.fetchUpcomingList(loadSize, offset)
-                if (localUpcomingListAgain.isEmpty()) {
-                    if (networkResult is SingleResult.Error) SingleResult.Error(networkResult.type)
-                    else SingleResult.Error(EmptyDataError)
+                if (localUpcomingListAgain.isEmpty() && networkResult is SingleResult.Error) {
+                    SingleResult.Error(networkResult.type)
                 } else SingleResult.Success(localUpcomingListAgain.mapToUpcomingList())
             } else SingleResult.Success(localUpcomingList.mapToUpcomingList())
         }

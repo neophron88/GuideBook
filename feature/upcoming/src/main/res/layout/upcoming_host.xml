@@ -13,27 +13,17 @@
         android:elevation="10dp"
         android:theme="?attr/actionBarTheme"
         app:title="@string/upcoming_guides"
+        app:titleTextColor="?attr/colorOnPrimary"
         app:titleTextAppearance="@style/ToolbarTextAppearance"
-        >
+        />
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:contentDescription="@string/application_logo"
-            android:scaleType="centerInside"
-            android:src="@drawable/guidebook_logo_white"
-            android:transitionName="logo_small" />
 
-    </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/appFragmentContainer"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
         app:navGraph="@navigation/upcoming_graph" />
 
 </LinearLayout>

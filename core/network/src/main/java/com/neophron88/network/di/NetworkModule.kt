@@ -18,7 +18,7 @@ internal class NetworkModule {
     @Singleton
     internal fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(" https://guidebook.com/service/v2/")
+            .baseUrl(" https://guidebook.com/")
             .addConverterFactory(MoshiConverterFactory.create(getMoshi()))
             .build()
     }

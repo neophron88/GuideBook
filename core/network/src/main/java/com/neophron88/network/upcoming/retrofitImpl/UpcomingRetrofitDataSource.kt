@@ -8,15 +8,16 @@ class UpcomingRetrofitDataSource(
     private val service: UpcomingService
 ) : UpcomingNetworkDataSource {
 
-    override suspend fun loadAllUpcoming(loadSize: Int,  offset: Int): List<UpcomingResponse> =
+    override suspend fun loadAllUpcoming(loadSize: Int, offset: Int): List<UpcomingResponse> =
         wrapRetrofitExceptions {
-            val upcomingList = service.loadAllUpcoming().upcomingList
+            val list = service.loadAllUpcoming().upcomingList
             val fromIndex = offset * loadSize
             val toIndex = fromIndex + loadSize
 
-            if (fromIndex < 0 || fromIndex >= upcomingList.size) emptyList()
-            else if (toIndex < 0 || toIndex >= upcomingList.size) emptyList()
-            else upcomingList.subList(fromIndex, toIndex)
+            if (fromIndex < 0 || fromIndex >= list.size) emptyList()
+            else if (toIndex < 0) emptyList()
+            else if (toIndex >= list.size) list.subList(fromIndex, list.size)
+            else list.subList(fromIndex, toIndex)
         }
 
 }

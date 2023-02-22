@@ -1,18 +1,16 @@
 package com.neophron88.database.upcoming.roomImpl
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.neophron88.database.upcoming.models.UpcomingEntity
 
+@Dao
 abstract class UpcomingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(upcomingList: List<UpcomingEntity>)
 
     @Transaction
-    suspend fun insertAfterDeleteAll(upcomingList: List<UpcomingEntity>) {
+    open suspend fun insertAfterDeleteAll(upcomingList: List<UpcomingEntity>) {
         clearAll()
         insertAll(upcomingList)
     }

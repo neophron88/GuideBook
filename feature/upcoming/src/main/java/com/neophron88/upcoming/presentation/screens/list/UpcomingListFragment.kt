@@ -2,6 +2,7 @@ package com.neophron88.upcoming.presentation.screens.list
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,7 +19,10 @@ import com.neophron88.mylibrary.ktx.fragment.viewLifeCycle
 import com.neophron88.mylibrary.viewbinding_delegate.viewBindings
 import com.neophron88.upcoming.R
 import com.neophron88.upcoming.databinding.FragmentUpcomingListBinding
-import com.neophron88.upcoming.presentation.screens.helper.getMessageErrorIfExists
+import com.neophron88.upcoming.presentation.contract.ActionBarBehavior
+import com.neophron88.upcoming.presentation.contract.ActionBarBehaviorHandler
+import com.neophron88.upcoming.presentation.helper.getMessageErrorIfExists
+import com.neophron88.upcoming.presentation.screens.detail.UpcomingDetailFragment
 import com.neophron88.upcoming.presentation.screens.list.adapter.UpcomingAdapter
 import com.neophron88.upcoming.presentation.screens.list.adapter.UpcomingFooterAdapter
 import kotlinx.coroutines.flow.collectLatest
@@ -43,9 +47,18 @@ class UpcomingListFragment : Fragment(R.layout.fragment_upcoming_list) {
 
     }
 
+
     private fun setupAdapter() = UpcomingAdapter(
         context = requireContext(),
-        onUpcomingItemClick = {}
+        onUpcomingItemClick = {
+            navController.navigate(
+                R.id.action_upcomingListFragment_to_upcomingDetailFragment,
+                bundleOf(
+                    UpcomingDetailFragment.GUIDE_ID to it.id,
+                    UpcomingDetailFragment.GUIDE_NAME to it.name
+                )
+            )
+        }
     )
 
     private fun setupFooterAdapter() = UpcomingFooterAdapter(
@@ -81,6 +94,15 @@ class UpcomingListFragment : Fragment(R.layout.fragment_upcoming_list) {
                 message.text = getStringOrNull(refreshState.getMessageErrorIfExists())
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        findParentAs<ActionBarBehaviorHandler>()
+            .setActionBarBehavior(object : ActionBarBehavior(viewLifecycleOwner) {
+                override val title: String = getString(R.string.upcoming_guides)
+                override val shouldApplyNavigateUp: Boolean = false
+            })
     }
 }
 

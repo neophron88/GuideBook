@@ -1,4 +1,4 @@
-package com.neophron88.upcoming.presentation.screens.helper
+package com.neophron88.upcoming.presentation.helper
 
 import android.content.Context
 import androidx.annotation.StringRes

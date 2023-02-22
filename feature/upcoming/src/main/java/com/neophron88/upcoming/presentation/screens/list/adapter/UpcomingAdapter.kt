@@ -12,7 +12,7 @@ import com.neophron88.upcoming.R
 import com.neophron88.upcoming.databinding.ItemUpcomingBinding
 import com.neophron88.upcoming.domain.models.Upcoming
 
-typealias onUpcomingItemClick = (url: String) -> Unit
+typealias onUpcomingItemClick = (upcoming: Upcoming) -> Unit
 
 class UpcomingAdapter(
     private val onUpcomingItemClick: onUpcomingItemClick,
@@ -41,7 +41,7 @@ class UpcomingAdapter(
         private val binding = ItemUpcomingBinding.bind(view)
 
         init {
-            binding.cardView.setOnClickListener { onUpcomingItemClick(item.url) }
+            binding.cardView.setOnClickListener { onUpcomingItemClick(item) }
         }
 
         override fun onBind(item: Upcoming) = with(binding) {

@@ -1,6 +1,7 @@
 package com.neophron88.upcoming.data.helper
 
 import com.neophron88.database.upcoming.models.UpcomingEntity
+import com.neophron88.network.base.BaseUrl
 import com.neophron88.network.upcoming.models.UpcomingResponse
 import com.neophron88.upcoming.domain.models.Upcoming
 
@@ -15,9 +16,9 @@ fun UpcomingEntity.mapToUpcoming() = Upcoming(
 )
 
 
-fun List<UpcomingResponse>.mapToUpcomingEntityList() = this.map {
-    it.mapToUpcomingEntity()
+fun List<UpcomingResponse>.mapToUpcomingEntityList(baseUrl: BaseUrl) = this.map {
+    it.mapToUpcomingEntity(baseUrl)
 }
 
-fun UpcomingResponse.mapToUpcomingEntity() =
-    UpcomingEntity(AUTOINCREMENT, url, iconUrl, startDate, endDate, name)
+fun UpcomingResponse.mapToUpcomingEntity(baseUrl: BaseUrl) =
+    UpcomingEntity(AUTOINCREMENT, baseUrl.url.plus(url), iconUrl, startDate, endDate, name)

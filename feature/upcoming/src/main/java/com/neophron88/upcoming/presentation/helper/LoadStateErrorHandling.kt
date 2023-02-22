@@ -1,4 +1,4 @@
-package com.neophron88.upcoming.presentation.screens.helper
+package com.neophron88.upcoming.presentation.helper
 
 import androidx.annotation.StringRes
 import androidx.paging.LoadState

@@ -10,8 +10,8 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.neophron88.upcoming.R
 import com.neophron88.upcoming.databinding.ItemUpcomingFooterBinding
-import com.neophron88.upcoming.presentation.screens.helper.getStringOrNull
-import com.neophron88.upcoming.presentation.screens.helper.getMessageErrorIfExists
+import com.neophron88.upcoming.presentation.helper.getStringOrNull
+import com.neophron88.upcoming.presentation.helper.getMessageErrorIfExists
 
 typealias TryAgainAction = () -> Unit
 

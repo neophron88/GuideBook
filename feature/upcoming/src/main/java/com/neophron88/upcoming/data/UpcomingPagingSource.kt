@@ -6,6 +6,7 @@ import com.neophron88.database.upcoming.UpcomingLocalDataSource
 import com.neophron88.feature.exceptions.wrapNetworkExceptions
 import com.neophron88.feature.result.SingleResult
 import com.neophron88.feature.result.TypeException
+import com.neophron88.network.base.BaseUrl
 import com.neophron88.network.upcoming.UpcomingNetworkDataSource
 import com.neophron88.upcoming.data.helper.mapToUpcomingEntityList
 import com.neophron88.upcoming.data.helper.mapToUpcomingList
@@ -13,6 +14,7 @@ import com.neophron88.upcoming.domain.models.Upcoming
 
 
 class UpcomingPagingSource(
+    private val baseUrl: BaseUrl,
     private val localDataSource: UpcomingLocalDataSource,
     private val networkDataSource: UpcomingNetworkDataSource
 ) : PagingSource<Int, Upcoming>() {
@@ -45,7 +47,7 @@ class UpcomingPagingSource(
         return if (offset == REFRESH) {
             val networkResult = wrapNetworkExceptions {
                 val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
-                localDataSource.insertAfterDeleteAll(networkUpcomingList.mapToUpcomingEntityList())
+                localDataSource.insertAfterDeleteAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
             }
             val localUpcomingList = localDataSource.fetchUpcomingList(loadSize, offset)
             if (localUpcomingList.isEmpty() && networkResult is SingleResult.Error) {
@@ -56,7 +58,7 @@ class UpcomingPagingSource(
             if (localUpcomingList.isEmpty()) {
                 val networkResult = wrapNetworkExceptions {
                     val networkUpcomingList = networkDataSource.loadAllUpcoming(loadSize, offset)
-                    localDataSource.insertAll(networkUpcomingList.mapToUpcomingEntityList())
+                    localDataSource.insertAll(networkUpcomingList.mapToUpcomingEntityList(baseUrl))
                 }
                 val localUpcomingListAgain = localDataSource.fetchUpcomingList(loadSize, offset)
                 if (localUpcomingListAgain.isEmpty() && networkResult is SingleResult.Error) {

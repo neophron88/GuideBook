@@ -2,6 +2,7 @@ package com.neophron88.upcoming.di
 
 import com.neophron88.database.upcoming.UpcomingLocalDataSource
 import com.neophron88.feature.viewModelFactory.ViewModelFactory
+import com.neophron88.network.base.BaseUrl
 import com.neophron88.network.upcoming.UpcomingNetworkDataSource
 import com.neophron88.upcoming.di.data.DataModule
 import com.neophron88.upcoming.di.domain.DomainModule
@@ -38,4 +39,6 @@ interface UpcomingFeatureDeps {
     fun getUpcomingLocalDataSource(): UpcomingLocalDataSource
 
     fun getUpcomingNetworkDataSource(): UpcomingNetworkDataSource
+
+    fun getBaseUrl(): BaseUrl
 }

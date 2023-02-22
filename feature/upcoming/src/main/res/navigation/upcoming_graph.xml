@@ -7,5 +7,18 @@
     <fragment
         android:id="@+id/upcomingListFragment"
         android:name="com.neophron88.upcoming.presentation.screens.list.UpcomingListFragment"
-        android:label="UpcomingListFragment" />
+        android:label="UpcomingListFragment" >
+        <action
+            android:id="@+id/action_upcomingListFragment_to_upcomingDetailFragment"
+            app:destination="@id/upcomingDetailFragment"
+            app:enterAnim="@anim/from_right_to_center"
+            app:exitAnim="@anim/from_center_to_left"
+            app:popEnterAnim="@anim/from_left_to_center"
+            app:popExitAnim="@anim/from_center_to_right"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/upcomingDetailFragment"
+        android:name="com.neophron88.upcoming.presentation.screens.detail.UpcomingDetailFragment"
+        android:label="UpcomingDetailFragment" />
 </navigation>

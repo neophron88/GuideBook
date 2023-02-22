@@ -12,7 +12,6 @@
         android:background="?attr/colorPrimary"
         android:elevation="10dp"
         android:theme="?attr/actionBarTheme"
-        app:title="@string/upcoming_guides"
         app:titleTextColor="?attr/colorOnPrimary"
         app:titleTextAppearance="@style/ToolbarTextAppearance"
         />
@@ -20,7 +19,7 @@
 
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/appFragmentContainer"
+        android:id="@+id/container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

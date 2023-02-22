@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface UpcomingRepository {
 
-    fun getPagedUpcoming(searchBy: String): Flow<PagingData<Upcoming>>
+    fun getPagedUpcoming(): Flow<PagingData<Upcoming>>
 
-    fun getUpcoming(): SingleResult<Upcoming>
+    suspend fun getUpcoming(upcomingId: Long): SingleResult<Upcoming>
 
 }

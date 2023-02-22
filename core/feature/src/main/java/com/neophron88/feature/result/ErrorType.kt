@@ -1,5 +1,7 @@
 package com.neophron88.feature.result
 
+import android.database.SQLException
+
 sealed class ErrorType
 
 sealed class NetworkErrorType : ErrorType() {
@@ -8,5 +10,9 @@ sealed class NetworkErrorType : ErrorType() {
     object Unknown : NetworkErrorType()
 }
 
-object DatabaseError : ErrorType()
+class DatabaseError(e:SQLException) : ErrorType()
+
+object EmptyDataError : ErrorType()
+
+class TypeException(errorType: ErrorType) : Throwable()
 

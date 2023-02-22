@@ -1,4 +1,4 @@
-package com.neophron88.upcoming.presentation.screens
+package com.neophron88.upcoming.presentation.screens.list
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController

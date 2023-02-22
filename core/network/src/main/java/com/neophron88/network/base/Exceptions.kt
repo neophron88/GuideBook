@@ -17,7 +17,7 @@ class ClientSideException(val code: Int, cause: Throwable) : NetworkException(ca
 class UnknownNetworkException(val code: Int, cause: Throwable) : NetworkException(cause, code)
 
 
-inline fun <T> wrapRetrofitExceptions(
+internal inline fun <T> wrapRetrofitExceptions(
     block: () -> T,
 ): T {
     try {
@@ -30,7 +30,7 @@ inline fun <T> wrapRetrofitExceptions(
 
 }
 
-fun parseHttpCodeToException(code: Int, cause: Throwable): NetworkException =
+internal fun parseHttpCodeToException(code: Int, cause: Throwable): NetworkException =
     if (code >= BACKEND) BackendSideException(code, cause)
     else if (code < BACKEND && code >= CLIENT) ClientSideException(code, cause)
     else UnknownNetworkException(code, cause)

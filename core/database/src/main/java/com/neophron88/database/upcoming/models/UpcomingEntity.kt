@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "upcoming_table")
 class UpcomingEntity(
-    @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Int,
+    @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "icon_url") val iconUrl: String,
     @ColumnInfo(name = "start_date") val startDate: String,

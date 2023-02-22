@@ -13,5 +13,6 @@ android {
 dependencies {
     implementation libs.room
     implementation libs.room.ktx
+    implementation libs.room.paging
     kapt libs.room.compiler
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_logo">application_logo</string>
+    <string name="no_upcoming_guides">"No upcoming guides "</string>
+    <string name="image">image</string>
+    <string name="upcoming_guides">Upcomig guides</string>
+</resources>

@@ -18,16 +18,16 @@ fun View.doOnApplyWindowInsets(target: Bars) {
             .getInsets(target.defineTarget())
 
         when (target) {
-            is SystemBars -> {
+            is Bars.SystemBars -> {
                 val bottom = insetsCompat.bottom
                 val top = insetsCompat.top
                 v.updatePadding(top = top, bottom = bottom)
             }
-            is StatusBars -> {
+            is Bars.StatusBars -> {
                 val top = insetsCompat.top
                 v.updatePadding(top = top)
             }
-            is NavigationBars -> {
+            is Bars.NavigationBars -> {
                 val bottom = insetsCompat.bottom
                 v.updatePadding(bottom = bottom)
             }
@@ -60,20 +60,23 @@ fun FragmentActivity.hideBars(bars: Bars) {
 
 fun FragmentActivity.showBars(bars: Bars) {
     val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+    windowInsetsController.isAppearanceLightStatusBars = false
+    windowInsetsController.isAppearanceLightNavigationBars = false
     windowInsetsController.show(bars.defineTarget())
 }
 
 
-sealed class Bars
-object SystemBars : Bars()
-object StatusBars : Bars()
-object NavigationBars : Bars()
+sealed class Bars {
+    object SystemBars : Bars()
+    object StatusBars : Bars()
+    object NavigationBars : Bars()
+}
 
 fun Bars.defineTarget(): Int =
     when (this) {
-        is SystemBars -> WindowInsetsCompat.Type.systemBars()
-        is StatusBars -> WindowInsetsCompat.Type.statusBars()
-        is NavigationBars -> WindowInsetsCompat.Type.navigationBars()
+        is Bars.SystemBars -> WindowInsetsCompat.Type.systemBars()
+        is Bars.StatusBars -> WindowInsetsCompat.Type.statusBars()
+        is Bars.NavigationBars -> WindowInsetsCompat.Type.navigationBars()
     }
 
 

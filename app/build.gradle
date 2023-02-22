@@ -17,6 +17,9 @@ dependencies {
     implementation project(':core:theme')
     implementation project(':core:database')
     implementation project(':core:network')
+    implementation project(':core:feature')
+    implementation project(':feature:splash')
+    implementation project(':feature:upcoming')
 
     implementation libs.navigation.fragment.ktx
     implementation libs.navigation.ui.ktx

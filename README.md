@@ -8,7 +8,7 @@ In the application, I applied the following approaches
   Single Activity,
   Single Source of Truth,
   
- Techologies:
+ Technologies:
   Navigation Component,
   Paging Library,
   Coroutines,
